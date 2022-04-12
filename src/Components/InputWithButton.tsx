@@ -1,56 +1,36 @@
-import { Box, Button, Input } from '@mui/material';
-import React from 'react';
+import { Box, Button, FormControl, Input } from '@mui/material';
+import React, { useState } from 'react';
+import './InputWithButton.css';
 
-type State = {
-    text: string;
-  };
+const InputWithButton = () => {
+    const [values,setValues] = useState({
+        hash : '',
+        summ : '0'
+    });
 
-class InputWithButton extends React.Component<{}, State>{
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {value: ''};
-    
-    //     this.handleChange = this.handleChange.bind(this);
-    //     this.handleSubmit = this.handleSubmit.bind(this);
-    //   }
-    // constructor(props){
-    //     super(props)
-    //     this.state = {
-    //         text: "",
-    //       };
-    // }
-    
-    state = {
-        text: "",
-      };
-    onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        this.setState({ text: e.currentTarget.value });
-      };
-    send():void{
-        alert(this.state)
+
+    const handleChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+        setValues({...values,[event.target.name] : event.target.value});
+
     }
-    render() {
-        return(
-        <Box sx={{ my: 4 }}>
-            <Input name='someHash' placeholder='Insert your hash here' value={this.state.text} onChange={this.onChange}></Input>
-            <Button variant="outlined" onClick={this.send}>Send</Button>
-        </Box>
+    const handleSubmit = (event : React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        console.log(values);
+        
+        if (values.hash === '' || values.summ === '0'){
+            alert('Одно из полей не заполнено')
+        } else {
+            alert('Fine')
+        }
+    }
+
+    return(
+        <form className='formContainer' onSubmit={(e) => handleSubmit(e)}>
+            <Input type='text' name='hash' placeholder='Insert hash here' onChange={handleChange}></Input>
+            <Input type='number' inputProps={{min:0, max:99999999}} name='summ' placeholder='Insert value here' onChange={handleChange}></Input>
+            <Button variant="outlined" type={"submit"}>Send</Button>
+        </form>
     )
-    }
 }
 
 export default InputWithButton
-
-// import { Box, Button, Input } from '@mui/material';
-// import React from 'react';
-
-// function InputWithButton(){
-//     return(
-//     <Box sx={{ my: 4 }}>
-//         <Input name='someHash' placeholder='Insert your hash here'></Input>
-//         <Button variant="outlined">Send</Button>
-//     </Box>
-//     )
-// }
-
-// export default InputWithButton
