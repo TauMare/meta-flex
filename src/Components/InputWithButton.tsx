@@ -61,7 +61,11 @@ const InputWithButton = () => {
                           ]
                         )
                     );
+                } else{
+                    alert('We can`t find MetaMask extension in your Chrome')
                 }
+            } else{
+                alert('We can`t find any etherium extensions')
             }
         }
     }
