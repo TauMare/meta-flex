@@ -1,8 +1,16 @@
 import { Box, Button, FormControl, Input, Modal, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import './InputWithButton.css';
+import { MetaMaskInpageProvider } from "@metamask/providers";
+
+declare global {
+    interface Window {
+      ethereum: MetaMaskInpageProvider;
+    }
+  }
 
 const InputWithButton = () => {
+    const ethereum = window.ethereum;
     const [values,setValues] = useState({
         hash : '',
         summ : '0'
@@ -16,18 +24,47 @@ const InputWithButton = () => {
         setValues({...values,[event.target.name] : event.target.value});
 
     }
-    const handleSubmit = (event : React.FormEvent<HTMLFormElement>) => {
+    const sendTransaction = async (params:Object[]) => {
+        const result = await ethereum.request(
+            {
+                method:'eth_sendTransaction',
+                params
+            }
+            )
+        return result
+    }
+    const handleSubmit = async (event : React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log(values);
         
         if (values.hash === '' || values.summ === '0'){
-            // alert('Одно из полей не заполнено')
             setOpen(true);
         } else {
             alert('Fine')
+            if (ethereum){
+                if(ethereum.isMetaMask){
+                    // ethereum.on('accountsChanged', function(accounts:any){
+                    //     console.log(accounts[0]);
+                    // })
+                    console.log(ethereum.selectedAddress);
+                    console.log(await sendTransaction(
+                        [
+                            {
+                              from: ethereum.selectedAddress,
+                              to: values.hash,
+                              gas: '1', // 30400
+                              gasPrice: '2', // 10000000000000
+                              value: values.summ, // 2441406250
+                              data:
+                                '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675',
+                            },
+                          ]
+                        )
+                    );
+                }
+            }
         }
     }
-
 
     const style = {
         position: 'absolute' as 'absolute',

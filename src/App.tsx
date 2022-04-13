@@ -2,7 +2,6 @@ import React from 'react';
 import {Container, Grid} from '@mui/material';
 import InputWithButton from './Components/InputWithButton';
 
-
 function App() {
   return (
     <Grid
