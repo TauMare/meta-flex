@@ -1,5 +1,4 @@
-## Getting started
-Make sure that MetaMask extension installed:
+## Пробный проект для реализации интеграции React с MetaMask
 
 ### `npm start`
 Runs the app in the development mode.\
